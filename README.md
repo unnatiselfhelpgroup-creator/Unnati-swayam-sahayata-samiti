@@ -1,1 +1,1 @@
-# Unnati-swayam-sahayata-samiti
+# Unnati-sawaye-sahayata-samiti
