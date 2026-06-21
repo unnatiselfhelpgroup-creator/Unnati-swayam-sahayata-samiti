@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Action Processing</title>
+    <style>body { font-family: Arial, sans-serif; text-align: center; padding: 60px 20px; background: #071b34; color: white; } button { padding: 14px 30px; background: #d4af37; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }</style>
+</head>
+<body>
+    <h2 id="statusMsg">प्रक्रिया जारी है...</h2>
+    <div id="actionArea"></div>
+    <script type="module">
+        import { db, auth } from "./firebase-config.js";
+        import { doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id'); const status = urlParams.get('status'); const type = urlParams.get('type');
+        const ALLOWED_STATUS = ["Approved", "Rejected", "Verified"];
+        function performUpdate() { onAuthStateChanged(auth, async (user) => { if (user) { if (id && status && ALLOWED_STATUS.includes(status)) { try { const collectionName = (type === "Appointment") ? "Appointments" : "StudentRegistrations"; await updateDoc(doc(db, collectionName, id), { status: status, actionType: type || "General" }); document.getElementById("statusMsg").innerText = "सफलतापूर्वक " + status + " कर दिया गया!"; } catch (e) { document.getElementById("statusMsg").innerText = "त्रुटि: " + e.message; } } else { document.getElementById("statusMsg").innerText = "गलत लिंक!"; } } else { window.location.href = "admin-login.html"; } }); }
+        function init() { if (!id || !status || !ALLOWED_STATUS.includes(status)) { document.getElementById("statusMsg").innerText = "अमान्य लिंक!"; return; } document.getElementById("statusMsg").innerText = "क्या आप \"" + status + "\" करना चाहते हैं?"; const btn = document.createElement("button"); btn.innerText = "हाँ, " + status + " करें"; btn.onclick = () => { btn.disabled = true; performUpdate(); }; document.getElementById("actionArea").appendChild(btn); }
+        init();
+    </script>
+</body>
+</html>
