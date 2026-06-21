@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Appointment Admin</title>
+    <style>body { background: #001a33; padding: 20px; color: white; } .card { background: white; color: black; padding: 20px; margin-bottom: 10px; border-radius: 10px; }</style>
+</head>
+<body>
+    <h1>Appointment Applications</h1>
+    <div id="list"></div>
+    <script type="module">
+        import { auth, db } from "./firebase-config.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+        import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        const recordsById = new Map();
+        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "admin-login.html"; else loadData(); });
+        async function loadData() {
+            const snap = await getDocs(collection(db, "Appointments"));
+            const list = document.getElementById("list"); list.innerHTML = "";
+            snap.forEach(docItem => { const d = docItem.data(); recordsById.set(docItem.id, d);
+                list.innerHTML += `<div class="card"><p><b>नाम:</b> ${d.name}</p><button onclick="updateStatus('${docItem.id}', 'Verified')">Approve</button></div>`;
+            });
+        }
+        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "Appointments", id), { status: status }); location.reload(); };
+    </script>
+</body>
+</html>
