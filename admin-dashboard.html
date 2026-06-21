@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>(function(){ emailjs.init("AvD_f76bB4qJYnGb0"); })();</script>
+</head>
+<body>
+    <h1>🔐 Admin Dashboard</h1>
+    <table id="studentTable"><thead><tr><th>नाम</th><th>Action</th></tr></thead><tbody id="studentBody"></tbody></table>
+    <script type="module">
+        import { auth, db } from "./firebase-config.js";
+        import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        const studentSnap = await getDocs(collection(db, "StudentRegistrations"));
+        const body = document.getElementById("studentBody");
+        studentSnap.forEach((docSnap) => { const data = docSnap.data();
+            body.innerHTML += `<tr><td>${data.name}</td><td><button onclick="window.updateStatus('${docSnap.id}', 'Approved')">Approve</button></td></tr>`;
+        });
+        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "StudentRegistrations", id), { status: status }); location.reload(); };
+    </script>
+</body>
+</html>
