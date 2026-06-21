@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head><meta charset="UTF-8"><title>Volunteer Management</title></head>
+<body>
+    <h1>Volunteer Management</h1>
+    <div id="totalVolunteer">0</div>
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        const snap = await getDocs(collection(db, "Volunteers"));
+        document.getElementById("totalVolunteer").innerText = snap.size;
+    </script>
+</body>
+</html>
