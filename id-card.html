@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head><meta charset="UTF-8"><title>ID Card आवेदन</title></head>
+<body>
+  <h2>ID कार्ड आवेदन</h2>
+  <form id="idCardForm" data-collection="IDCards" data-form-label="ID कार्ड आवेदन">
+    <input type="file" name="photo" accept="image/*" required>
+    <input type="text" name="name" placeholder="नाम" required>
+    <input type="text" name="father_name" placeholder="पिता का नाम" required>
+    <button type="submit">आवेदन करें</button>
+  </form>
+  <script type="module" src="firebase-script.js"></script>
+</body>
+</html>
