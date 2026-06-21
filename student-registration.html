@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="hi"><body>
+<form id="studentRegForm">
+<input type="text" name="name" placeholder="नाम" required>
+<button type="submit">भुगतान करें</button>
+</form>
+<script>document.getElementById("studentRegForm").onsubmit=(e)=>{e.preventDefault(); sessionStorage.setItem("pendingStudentData", JSON.stringify(Object.fromEntries(new FormData(e.target)))); window.location.href="payment.html";}</script>
+</body></html>
